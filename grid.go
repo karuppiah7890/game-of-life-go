@@ -66,7 +66,7 @@ func (g Grid) DeadCells() Cells {
 func (g Grid) NextGenAliveCellsOf(cells Cells) Cells {
 	nextGenAliveCells := make(Cells, 0, len(cells))
 	for _, cell := range cells {
-		numberOfAliveneighborCells := cell.NumberOfAliveNeighbors(g)
+		numberOfAliveneighborCells := g.NumberOfAliveNeighbors(cell)
 
 		cellLives := cell.DoILive(numberOfAliveneighborCells)
 
@@ -81,6 +81,23 @@ func (g Grid) NextGenAliveCellsOf(cells Cells) Cells {
 	}
 
 	return nextGenAliveCells
+}
+
+// NumberOfAliveNeighbors gives the number of alive neighbor cells for a given cell in a given grid
+func (g Grid) NumberOfAliveNeighbors(cell Cell) int {
+	numberOfAliveNeighbors := 0
+	for i := -1; i <= 1; i++ {
+		for j := -1; j <= 1; j++ {
+			if i == 0 && j == 0 {
+				continue
+			}
+			if g.IsCellAlive(cell.X+i, cell.Y+j) {
+				numberOfAliveNeighbors++
+			}
+		}
+	}
+
+	return numberOfAliveNeighbors
 }
 
 // Print prints the grid
